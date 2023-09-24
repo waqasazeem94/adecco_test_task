@@ -1,3 +1,4 @@
+import 'package:adecco_task/app/injector/di.dart';
 import 'package:adecco_task/app/navigation/router.dart';
 import 'package:adecco_task/app/resources/app_strings.dart';
 import 'package:adecco_task/app/theming/app_theme.dart';
@@ -9,6 +10,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 void main() {
+  initInjector();
   runApp(const MyApp());
 }
 
@@ -47,31 +49,7 @@ class MyApp extends StatelessWidget {
 //   TextEditingController emailController = TextEditingController();
 //   TextEditingController passwordController = TextEditingController();
 //
-//   void login(String email , password) async {
-//
-//     try{
-//
-//       Response response = await post(
-//           Uri.parse('https://reqres.in/api/login'),
-//           body: {
-//             'email' : 'eve.holt@reqres.in',
-//             'password' : 'cityslicka'
-//           }
-//       );
-//
-//       if(response.statusCode == 200){
-//
-//         var data = jsonDecode(response.body.toString());
-//         print(data['token']);
-//         print('Login successfully');
-//
-//       }else {
-//         print('failed');
-//       }
-//     }catch(e){
-//       print(e.toString());
-//     }
-//   }
+
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(

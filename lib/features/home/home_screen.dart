@@ -23,12 +23,12 @@ class HomeScreen extends StatelessWidget {
           children: [
             const Spacer(),
             Text(
-              'ndsknlsa',
+              'Home Screen',
               style: Theme.of(context).textTheme.labelLarge,
             ),
             const Spacer(),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(fixedSize: Size(350.w, 60.h)),
+              style: ElevatedButton.styleFrom(fixedSize: Size(350.w, 50.h)),
               onPressed: () => context.pop(),
               child: Text(AppStrings.back),
             ),

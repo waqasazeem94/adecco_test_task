@@ -1,5 +1,7 @@
+import 'package:adecco_task/app/injector/di.dart';
 import 'package:adecco_task/app/resources/app_strings.dart';
 import 'package:adecco_task/app/utils/regexes.dart';
+import 'package:adecco_task/features/login/data/repositories/i_login_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -14,16 +16,17 @@ class LoginFormValidation extends StatefulWidget {
 class LoginFormValidationState extends State<LoginFormValidation> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final focusNode = FocusNode();
+  final _repository = locator<ILoginRepository>();
+  final userEmailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   String? validatePassword(String? value) {
     if (value!.isEmpty) {
       return "* Required";
-    } else if (value.length < 10) {
-      return "Password should be at least 10 characters";
-    } else if (value == "cityslicka") {
-      return null;
+    } else if (value.length < 6) {
+      return "Password should be at least 6 characters";
     } else {
-      return "Please enter correct password";
+      return null;
     }
   }
 
@@ -66,14 +69,17 @@ class LoginFormValidationState extends State<LoginFormValidation> {
                 ),
                 SizedBox(height: 40.h),
                 TextFormField(
+                  controller: userEmailController,
                   decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Email',
-                      hintText: 'Enter valid email id as abc@gmail.com'),
+                    border: OutlineInputBorder(),
+                    labelText: 'Name',
+                    hintText: 'Enter email',
+                  ),
                   validator: validateEmail,
                 ),
                 SizedBox(height: 20.h),
                 TextFormField(
+                  controller: passwordController,
                   obscureText: true,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -88,20 +94,26 @@ class LoginFormValidationState extends State<LoginFormValidation> {
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(1.sw, 50.h),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     unFocus();
-                    // context.go("/home");
                     if (formKey.currentState!.validate()) {
-                      context.go("/home");
-                      print("Validated");
-                    } else {
-                      print("Not Validated");
+                      final data = await _repository.login(
+                        email: userEmailController.text.trim(),
+                        password: passwordController.text.trim(),
+                      );
+                      if (data == true) {
+                        if (!mounted) return;
+                        context.push("/home");
+                      } else {
+                        if (!mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Please enter correct credentials'),
+                          duration: Duration(seconds: 1),
+                        ));
+                      }
                     }
                   },
-                  child: Text(
-                    'Login',
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  ),
+                  child: const Text('Login'),
                 ),
               ],
             ),

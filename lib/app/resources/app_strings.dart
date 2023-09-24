@@ -6,5 +6,4 @@ class AppStrings {
   static String login = "Login";
   static String back = "Back";
   static String pleaseEnterValidEmail = "Please enter valid email";
-
 }
